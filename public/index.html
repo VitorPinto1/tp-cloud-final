@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tp-cloud-final — Front</title>
+</head>
+<body>
+  <main>
+    <h1>Mon application front</h1>
+    <p>Bienvenue sur la page principale.</p>
+    <p><strong>Équipe :</strong> [Nom Prénom] — [Nom Prénom]</p>
+    <section id="api-data">
+      <h2>Données API</h2>
+      <p id="loading">Chargement…</p>
+      <pre id="output"></pre>
+    </section>
+  </main>
+  <script>
+    (function () {
+      var API_URL = '__API_URL__';
+      var out = document.getElementById('output');
+      var loading = document.getElementById('loading');
+      if (!API_URL || API_URL === '__API_URL__') {
+        loading.textContent = 'Configurer API_URL (URL de votre API).';
+        return;
+      }
+      fetch(API_URL.replace(/\/$/, '') + '/api/data')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          loading.remove();
+          out.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(function (err) {
+          loading.textContent = 'Erreur : ' + err.message;
+        });
+    })();
+  </script>
+</body>
+</html>

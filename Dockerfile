@@ -1,15 +1,9 @@
-FROM node:22-slim
+FROM nginx:alpine
 
-WORKDIR /app
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY public /usr/share/nginx/html
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
-ENV PORT=8080
 EXPOSE 8080
-
-CMD ["npm", "run", "start"]
+ENTRYPOINT ["/entrypoint.sh"]

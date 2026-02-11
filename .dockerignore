@@ -1,0 +1,10 @@
+.git
+.github
+.env
+service
+app
+tests
+
+README.md
+.gitignore
+*.md

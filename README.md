@@ -1,51 +1,29 @@
-# tp_cloud_2
-Application NestJS minimale pour GCP
+# tp-cloud-final
 
-# Docker run
-docker run -d -p 8080:8080 --name tp2-container tp_cloud_2
+Front statique (HTML + JS) servi par nginx, déployé sur Cloud Run. Aucun Node.js.
 
-# Gcloud selection projet
-gcloud config set project tp-cloud-2-480808
+## Structure
 
-# Gcloud activer cloud build
-gcloud services enable cloudbuild.googleapis.com
+- `public/index.html` — page unique, affiche les données de l’API (variable d’env `API_URL`)
+- `nginx.conf` — nginx en écoute sur le port 8080
+- `entrypoint.sh` — remplace `__API_URL__` par `$API_URL` au démarrage
+- `Dockerfile` — image nginx:alpine
+- `cloudbuild.yaml` — build + push Artifact Registry + déploiement Cloud Run
 
-# Gcloud build manuel
+## Build et déploiement
 
-local il faut metre le id projet en dur
+```bash
+# Build local
+docker build -t tp-cloud-final .
 
-gcloud builds submit --config=cloudbuild.yaml .
+# Lancer en local (optionnel : passer l’URL de l’API)
+docker run -p 8080:8080 -e API_URL=https://VOTRE_API.region.run.app tp-cloud-final
+```
 
-ou 
+Déploiement automatique : trigger Cloud Build sur push `main` (voir `cloudbuild.yaml`).
 
-gcloud builds submit --config cloudbuild.yaml --project tp-cloud-2-480808 .
+Sur Cloud Run, définir la variable d’environnement `API_URL` (ex. `https://monProjet.region.run.app`) pour que le front appelle la bonne API.
 
-# Gcloud artifacts - À créer la première fois
+## Équipe
 
-  gcloud artifacts repositories create tp-cloud-2-docker \
-    --repository-format=docker \
-    --location=europe-west9
-
-# gcloud artifacts authentification, build, push, déploiement (si besoin, optionnel)
-
-  gcloud auth configure-docker europe-west9-docker.pkg.dev
-
-  docker build -t europe-west9-docker.pkg.dev/tp-cloud-2-480808/tp-cloud-2-docker/tp_cloud_2:latest .
-  
-  docker push europe-west9-docker.pkg.dev/tp-cloud-2-480808/tp-cloud-2-docker/tp_cloud_2:latest
-
-# Gcloud RUN
-
-gcloud run deploy tp-cloud-2 --image europe-west9-docker.pkg.dev/tp-cloud-2-480808/tp-cloud-2-docker/tp_cloud_2:latest --region europe-west9
-
-# lien 
-https://tp-cloud-2-426914906044.europe-west9.run.app
-
-
-# liste des images
-
-gcloud artifacts docker images list europe-west9-docker.pkg.dev/tp-cloud-2-480808/tp-cloud-2-docker --include-tags
-
-# Compte de service
-Agent de service Cloud Build
-Éditeur Cloud Build
+Renseigner les noms / prénoms dans `public/index.html` (ligne « Équipe »).
