@@ -18,13 +18,9 @@
   </main>
   <script>
     (function () {
-      var API_URL = '__API_URL__';
+      var API_URL = 'https://tp-cloud-2-426914906044.europe-west9.run.app';
       var out = document.getElementById('output');
       var loading = document.getElementById('loading');
-      if (!API_URL || API_URL === '__API_URL__') {
-        loading.textContent = 'Configurer API_URL (URL de votre API).';
-        return;
-      }
       fetch(API_URL.replace(/\/$/, '') + '/api/data')
         .then(function (r) { return r.json(); })
         .then(function (data) {
