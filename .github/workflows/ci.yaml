@@ -18,7 +18,7 @@ jobs:
           test -f nginx.conf
           test -f cloudbuild.yaml
           echo "Fichiers OK"
-      - name: Test simple sur index.html
+      - name: Test index.html
         run: |
           grep -q "<h1>TP Cloud final</h1>" public/index.html
           echo "Contenu index.html OK"
